@@ -34,4 +34,4 @@ def get_files_info(working_directory, directory="."):
 
     # Handle exceptions that may occur during directory access and file information retrieval
     except Exception as e:
-        return f"Error listing files: {str(e)}" 
+        return f"Error: {str(e)}" 

@@ -10,5 +10,7 @@ wheels/
 .venv
 .env
 
-# Lorem to test buffer limit of get_file_content
+# Lorem test documents
 lorem.txt
+morelorem.txt
+temp.txt

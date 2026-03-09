@@ -1,9 +1,9 @@
 import argparse
 import os
 
-from dotenv import load_dotenv
-from google import genai
-from google.genai import types
+from dotenv import load_dotenv # type: ignore
+from google import genai # type: ignore
+from google.genai import types # type: ignore
 
 # Load environment variables from .env file and get the API key
 load_dotenv()

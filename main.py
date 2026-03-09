@@ -40,7 +40,8 @@ response = client.models.generate_content(
 if response.usage_metadata is None:
     raise RuntimeError("Usage metadata is not available in the response")
 
-# Print the token counts and the response text
+# If verbose mode is enabled, print the user prompt and token counts from the response
+# otherwise, just print the response text
 if args.verbose:
     print("User prompt:", args.user_prompt)
     print("Prompt tokens:", response.usage_metadata.prompt_token_count)

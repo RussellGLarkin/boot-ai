@@ -1,5 +1,6 @@
 import argparse
 import os
+from system_prompts import system_prompt
 
 from dotenv import load_dotenv # type: ignore
 from google import genai # type: ignore
@@ -33,7 +34,11 @@ messages = [
 # Send the message to the model and get the response
 response = client.models.generate_content(
     model="gemini-2.5-flash",
-    contents=messages
+    contents=messages,
+    config=types.GenerateContentConfig(
+        system_instruction=system_prompt,
+        temperature=0,
+    )
 )
 
 # Verify that usage metadata is available in the response before trying to access it

@@ -1,55 +1,52 @@
 import argparse
 import os
-from system_prompts import system_prompt
 
+from openai.types.chat import ChatCompletionMessageParam
 from dotenv import load_dotenv # type: ignore
-from google import genai # type: ignore
-from google.genai import types # type: ignore
+from openai import OpenAI
 
 # Load environment variables from .env file and get the API key
 load_dotenv()
-api_key = os.environ.get("GEMINI_API_KEY")
+api_key = os.environ.get("OPENROUTER_API_KEY")
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=api_key,
+)
 
 # Ensure the API key exists before proceeding
 if api_key is None:
-    raise RuntimeError("GEMINI_API_KEY environment variable not set")
-
-# Initialize the GenAI client with the API key
-client = genai.Client(api_key=api_key)
+    raise RuntimeError("OPENROUTER_API_KEY environment variable not set")
 
 # Set up argument parsing to get the user prompt from the command line
-parser = argparse.ArgumentParser(description="Chatbot for Boot.dev")
-parser.add_argument("user_prompt", type=str, default="gemini-2.5-flash", help="User prompt to send to the chatbot")
+parser = argparse.ArgumentParser(description="Chatbot")
+parser.add_argument("user_prompt", type=str, help="User prompt")
 parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
 args = parser.parse_args()
+# Now we can access `args.user_prompt`
 
 # Build the message content to send to the model, using the user prompt from the command line
-messages = [
-    types.Content(
-        role="user",
-        parts=[types.Part(text=args.user_prompt)]
-    )
+user_prompt = args.user_prompt
+
+messages: list[ChatCompletionMessageParam] = [
+    {"role": "user", "content": user_prompt},
 ]
 
 # Send the message to the model and get the response
-response = client.models.generate_content(
-    model="gemini-2.5-flash",
-    contents=messages,
-    config=types.GenerateContentConfig(
-        system_instruction=system_prompt,
-        temperature=0,
-    )
+response = client.chat.completions.create(
+    model="openrouter/free", 
+    messages=messages,
+    temperature=0,
 )
 
 # Verify that usage metadata is available in the response before trying to access it
-if response.usage_metadata is None:
-    raise RuntimeError("Usage metadata is not available in the response")
+if response.usage is None:
+    raise RuntimeError("Usage data is not available in the response")
 
 # If verbose mode is enabled, print the user prompt and token counts from the response
 # otherwise, just print the response text
 if args.verbose:
-    print("User prompt:", args.user_prompt)
-    print("Prompt tokens:", response.usage_metadata.prompt_token_count)
-    print("Response tokens:", response.usage_metadata.candidates_token_count)
+    print("User prompt:", user_prompt)
+    print("Prompt tokens:", response.usage.prompt_tokens)
+    print("Response tokens:", response.usage.completion_tokens)
 print("Response:")
-print(response.text)
+print(response.choices[0].message.content)

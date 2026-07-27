@@ -15,3 +15,7 @@ print(f"    {get_files_info('calculator', '/bin')}")
 # Case 4
 print("\nResult for '../' directory:")
 print(f"    {get_files_info('calculator', '../')}")
+
+# Case 5
+print("\nResult for 'main.py':")
+print(f"    {get_files_info('calculator', 'main.py')}")

@@ -1,6 +1,6 @@
 import os
 
-def write_file(working_directory, file_path, content):
+def write_file(working_directory: str, file_path: str, content: str) -> str:
     """
     Writes content to a file at the specified path.
 

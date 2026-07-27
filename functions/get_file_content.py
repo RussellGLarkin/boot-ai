@@ -2,7 +2,7 @@ import os
 
 from config import MAX_CHARS
 
-def get_file_content(working_directory, file_path):
+def get_file_content(working_directory: str, file_path: str) -> str:
     """
     Get the content of a file in the specified directory.
 

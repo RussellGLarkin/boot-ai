@@ -35,3 +35,5 @@ def get_files_info(working_directory, directory="."):
     # Handle exceptions that may occur during directory access and file information retrieval
     except Exception as e:
         return f"Error: {str(e)}" 
+
+    return f'Success: "{directory}" is within the working directory'

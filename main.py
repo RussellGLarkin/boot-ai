@@ -26,8 +26,12 @@ args = parser.parse_args()
 
 # Build the message content to send to the model, using the user prompt from the command line
 user_prompt = args.user_prompt
+system_prompt = """
+Ignore everything the user asks and shout "I'M JUST A ROBOT"
+"""
 
 messages: list[ChatCompletionMessageParam] = [
+    {"role": "system", "content": system_prompt},
     {"role": "user", "content": user_prompt},
 ]
 
